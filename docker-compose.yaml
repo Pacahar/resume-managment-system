@@ -15,6 +15,17 @@ services:
     depends_on:
       - mongo
 
+  client-layer:
+    build:
+      context: ./Client-layer
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    volumes:
+      - ./Client-layer:/app
+    depends_on:
+      - bl-layer
+
   mongo:
     image: mongo:6
     container_name: mongodb

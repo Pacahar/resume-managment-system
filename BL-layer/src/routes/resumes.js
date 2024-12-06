@@ -36,12 +36,17 @@ router.post('/', authMiddleware, async (req, res) => {
 // Получение всех резюме
 router.get('/', authMiddleware, async (req, res) => {
     try {
-        const resumes = await Resume.find().populate('job', 'title company');
+        const { jobId } = req.query; // Получение jobId из параметров запроса
+
+        const filter = jobId ? { job: jobId } : {}; // Условие фильтрации
+
+        const resumes = await Resume.find(filter).populate('job', 'title company');
         res.status(200).json(resumes);
     } catch (error) {
         res.status(500).json({ message: 'Ошибка при получении резюме', error });
     }
 });
+
 
 // Получение конкретного резюме
 router.get('/:id', authMiddleware, async (req, res) => {
